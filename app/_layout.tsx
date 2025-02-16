@@ -10,6 +10,18 @@ export default function RootLayout() {
                     headerShown: false,
                 }}                
             />
+            <Stack.Screen
+                name="(portal)"
+                options={{
+                    headerShown: false,
+                }}                
+            />
+            <Stack.Screen
+                name="(clock)"
+                options={{
+                    headerShown: false,
+                }}                
+            />
         </Stack>
     )
 }

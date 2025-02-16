@@ -1,45 +1,89 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import HTMLView from 'react-native-htmlview';
+import { useRouter } from "expo-router";
 
 export default function Exercise() {
+    const router = useRouter();
 
-const content1 = `<strong><p>React-Native introduction</p></strong>
-<ul>
-<li>Create a React-Native window in Visual Code</li>
-<li>Input full name in the display</li>
-</ul>
-<p>STATUS: COMPLETED</p>`;
+    const c1 = `<strong><p>React-Native introduction</p></strong>
+    <ul>
+    <li>Create a React-Native window in Visual Code</li>
+    <li>Input full name in the display</li>
+    </ul>
+    <p>STATUS: COMPLETED</p>`;
 
-const content2 = `<strong><p>React-Native Home-Exercise web project<p></strong>
-<ul>
-<li>Home – In the Home tab, display your full name</li>
-<li>Exercise – In the Exercises tab, create cards that list the exercises with descriptions rendered in HTML</li>
-</ul>
-<p>STATUS: COMPLETED</p>`;
+    const c2 = `<strong><p>React-Native Home-Exercise web project<p></strong>
+    <ul>
+    <li>Home – In the Home tab, display your full name</li>
+    <li>Exercise – In the Exercises tab, create cards that list the exercises with descriptions rendered in HTML</li>
+    </ul>
+    <p>STATUS: COMPLETED</p>`;
 
-    const [task, setTask] = useState([
-        { note: 'Exercise 1', content: content1, isHtml: true, key: '1' },
-        { note: 'Exercise 2', content: content2, isHtml: true, key: '2' },
-        { note: 'Exercise 3', content: '', isHtml: false, key: '3' },
-        { note: 'Exercise 4', content: '', isHtml: false, key: '4' },
-        { note: 'Exercise 5', content: '', isHtml: false, key: '5' },
-        { note: 'Exercise 6', content: '', isHtml: false, key: '6' },
+    const c3 = `<strong><p>Log-in Screen<p></strong>
+    <ul>
+    <li>Must incorporate;</li>
+    <li>Email (Text Input)</li>
+    <li>Password (Text Input)</li>
+    <li>Login (Button)</li>
+    </ul>
+    <p>STATUS: COMPLETED</p>`;
+
+    const c5 = `<strong><p>Register Screen<p></strong>
+    <ul>
+    <li>Must incorporate;</li>
+    <li>Image (Image picker when image selected should display the image selected)</li>
+    <li>Email (Text Input)</li>
+    <li>Name (Text Input)</li>
+    <li>Password (Text Input)</li>
+    <li>Register (Button)</li>
+    </ul>
+    <p>STATUS: COMPLETED</p>`;
+
+    const [tasks, setTasks] = useState([
+        { note: 'Exercise 1', content: c1, isHtml: true, key: '1', expanded: false },
+        { note: 'Exercise 2', content: c2, isHtml: true, key: '2', expanded: false },
+        { note: 'Exercise 3', content: c3, isHtml: true, key: '3', expanded: false },
+        { note: 'Exercise 4', content: '', isHtml: false, key: '4', expanded: false },
+        { note: 'Exercise 5', content: c5, isHtml: true, key: '5', expanded: false },
+        { note: 'Exercise 6', content: '', isHtml: false, key: '6', expanded: false },
     ]);
+
+    const toggleContent = (key: string) => {
+        setTasks(prevTasks =>
+            prevTasks.map(task =>
+                task.key === key ? { ...task, expanded: !task.expanded } : task
+            )
+        );
+    };
+
+    const handleLongPress = (key: string) => {
+        if (key === '3') {
+            router.push('/login');
+        } else if (key === '4') {
+            router.push('/tally');
+        } else if (key === '5') {
+        router.push('/register');
+    }
+    };
 
     return (
         <View style={styles.container}>
             <ScrollView>
-                {task.map((item) => {
-                    return (
-                        <View key={item.key} style={styles.item}>
+                {tasks.map((item) => (
+                    <TouchableOpacity
+                        key={item.key}
+                        onPress={() => toggleContent(item.key)}
+                        onLongPress={() => handleLongPress(item.key)}
+                    >
+                        <View style={styles.item}>
                             <Text style={styles.text}>{item.note}</Text>
-                            {item.isHtml ? (
+                            {item.expanded && item.isHtml && (
                                 <HTMLView value={item.content} stylesheet={htmlStyles} />
-                            ) : null}
+                            )}
                         </View>
-                    );
-                })}
+                    </TouchableOpacity>
+                ))}
             </ScrollView>
         </View>
     );
@@ -59,7 +103,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'teal',
     },
     text: {
-        fontSize: 50,
+        fontSize: 30,
         color: 'white',
         textAlign: 'center',
         fontWeight: 'bold',

@@ -10,7 +10,7 @@ export default function Layout() {
             <Tabs.Screen
             name="index"
             options={{
-                title: "Home",
+                title: "HOME",
                 tabBarIcon: ({ color }) =>
                     <MaterialIcons size={(28)} name="home" color={color}/>
             }}
@@ -18,7 +18,7 @@ export default function Layout() {
             <Tabs.Screen
             name="exercise"
             options={{
-                title: "Exercise",
+                title: "EXERCISE",
                 tabBarIcon: ({ color }) =>
                     <MaterialIcons size={(28)} name="add-card" color={color}/>
             }}
