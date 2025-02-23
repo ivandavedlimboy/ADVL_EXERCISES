@@ -85,12 +85,10 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
+    boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
     elevation: 5,
   },
+  
   imagePicker: {
     width: 100,
     height: 100,

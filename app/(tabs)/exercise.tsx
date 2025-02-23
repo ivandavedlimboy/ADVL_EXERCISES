@@ -39,12 +39,20 @@ export default function Exercise() {
     <li>Register (Button)</li>
     </ul>
     <p>STATUS: COMPLETED</p>`;
+    
+    const c4 = `<strong><p>Stopwatch<p></strong>
+    <ul>
+    <li>Using the useState and useEffect hooks, create a stopwatch with two buttons:</li>
+    <li>one for Start/Stop</li>
+    <li>and one for Reset</li>
+    </ul>
+    <p>STATUS: COMPLETED</p>`;
 
     const [tasks, setTasks] = useState([
         { note: 'Exercise 1', content: c1, isHtml: true, key: '1', expanded: false },
         { note: 'Exercise 2', content: c2, isHtml: true, key: '2', expanded: false },
         { note: 'Exercise 3', content: c3, isHtml: true, key: '3', expanded: false },
-        { note: 'Exercise 4', content: '', isHtml: false, key: '4', expanded: false },
+        { note: 'Exercise 4', content: c4, isHtml: true, key: '4', expanded: false },
         { note: 'Exercise 5', content: c5, isHtml: true, key: '5', expanded: false },
         { note: 'Exercise 6', content: '', isHtml: false, key: '6', expanded: false },
     ]);
@@ -61,10 +69,10 @@ export default function Exercise() {
         if (key === '3') {
             router.push('/login');
         } else if (key === '4') {
-            router.push('/tally');
+            router.push('/timer');
         } else if (key === '5') {
         router.push('/register');
-    }
+        } 
     };
 
     return (

@@ -5,14 +5,10 @@ export default function layout() {
         <Stack>
             <Stack.Screen
             name="login"
-            options={{
-                headerTitle: "",
-            }}/>
+            options={{ headerTitle: "", }}/>
             <Stack.Screen
             name="register"
-            options={{
-                headerTitle: "",
-            }}/>
+            options={{ headerTitle: "", }}/>
         </Stack>
     )
 }
