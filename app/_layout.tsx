@@ -13,7 +13,9 @@ export default function RootLayout() {
             <Stack.Screen
                 name="(clock)"
                 options={{ headerShown: false, }}/>
+            <Stack.Screen 
+            name="reducer"
+            options={{ headerShown: false, }}/>
         </Stack>
     )
 }
-

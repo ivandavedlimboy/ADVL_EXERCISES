@@ -72,7 +72,9 @@ export default function Exercise() {
             router.push('/timer');
         } else if (key === '5') {
         router.push('/register');
-        } 
+        } else if (key === '6') {
+            router.push('/reducer/usereducer')
+        }
     };
 
     return (
