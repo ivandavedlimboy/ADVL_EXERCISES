@@ -5,7 +5,7 @@ export default function Useref() {
   const count = useRef<number>(0);
   const viewElement = useRef<View | null>(null);
   const textInputRef = useRef<TextInput | null>(null);
-  const [state, setState] = useState(0); // To trigger re-renders
+  const [state, setState] = useState(0);
 
   useEffect(() => {
     if (viewElement.current) {
@@ -20,7 +20,7 @@ export default function Useref() {
       <Button
         onPress={() => {
           count.current += 1;
-          setState(count.current); // Force re-render
+          setState(count.current); 
         }}
         title="Click Me!"
       />

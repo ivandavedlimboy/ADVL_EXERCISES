@@ -1,6 +1,6 @@
 import { View } from "react-native";
-import UserInfo from "./UserInfo"; // Ensure case matches the actual filename
-import Usereducer from "./usereducer"; // Ensure case matches the actual filename
+import UserInfo from "./UserInfo"; 
+import Usereducer from "./usereducer";
 
 
 

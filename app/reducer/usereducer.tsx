@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { View, TextInput, Button, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 
-// Reducer function
+
 function handleTodoReducer(state: { id: number; title: string }[], action: any) {
     switch (action.type) {
         case "add":
