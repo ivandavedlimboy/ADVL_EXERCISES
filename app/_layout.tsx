@@ -16,6 +16,9 @@ export default function RootLayout() {
             <Stack.Screen 
             name="reducer"
             options={{ headerShown: false, }}/>
+            <Stack.Screen
+            name="quiz"
+            options={{ headerShown: false, }}/>
         </Stack>
     )
 }

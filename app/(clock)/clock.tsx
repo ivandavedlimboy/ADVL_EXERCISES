@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: "bold",
     color: "#003d3d",
-    backgroundColor: "white", // Ensure it remains white in all modes
+    backgroundColor: "white",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

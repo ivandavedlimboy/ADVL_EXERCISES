@@ -55,6 +55,7 @@ export default function Exercise() {
         { note: 'Exercise 4', content: c4, isHtml: true, key: '4', expanded: false },
         { note: 'Exercise 5', content: c5, isHtml: true, key: '5', expanded: false },
         { note: 'Exercise 6', content: '', isHtml: false, key: '6', expanded: false },
+        { note: 'Exercise 7', content: '', isHtml: false, key: '7', expanded: false },
     ]);
 
     const toggleContent = (key: string) => {
@@ -74,6 +75,8 @@ export default function Exercise() {
         router.push('/register');
         } else if (key === '6') {
             router.push('/reducer/usereducer')
+        } else if (key === '7') {
+            router.push('/quiz/QuizScreen')
         }
     };
 
