@@ -1,17 +1,26 @@
 import { useForm, Controller } from "react-hook-form";
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
-
+import { auth, storage } from "@/config/firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function Register() {
   const defaultImage = require("../../assets/images/no_profile.webp");
   const [image, setImage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { control, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
-
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -25,25 +34,58 @@ export default function Register() {
     }
   };
 
+  const onSubmit = async (data: any) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    setSuccessMessage("Registered successfully!");
-    setTimeout(() => {
-      setSuccessMessage(null);
-      router.push("/login");
-    }, 2000);
+      const user = userCredential.user;
+      let photoURL = "";
+
+      if (image) {
+        const response = await fetch(image);
+        const blob = await response.blob();
+
+        const imageRef = ref(storage, `profileImages/${user.uid}.jpg`);
+        await uploadBytes(imageRef, blob);
+
+        photoURL = await getDownloadURL(imageRef);
+      }
+
+      await updateProfile(user, {
+        displayName: data.name,
+        photoURL: photoURL,
+      });
+
+      setSuccessMessage("Registered successfully!");
+      setErrorMessage(null);
+      setTimeout(() => {
+        setSuccessMessage(null);
+        router.push("/login");
+      }, 2000);
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        setErrorMessage("Email already in use");
+      } else {
+        setErrorMessage("Registration failed. Please try again.");
+      }
+      console.error("Registration error:", error.message);
+    }
   };
-
 
   return (
     <View style={styles.container}>
       <Text style={styles.mainTitle}>REGISTER</Text>
       <View style={styles.registerBox}>
         <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-          <Image source={image ? { uri: image } : defaultImage} style={styles.image} />
+          <Image
+            source={image ? { uri: image } : defaultImage}
+            style={styles.image}
+          />
         </TouchableOpacity>
-
 
         <Controller
           control={control}
@@ -62,13 +104,15 @@ export default function Register() {
           <Text style={styles.errorText}>{(errors.name as any).message}</Text>
         )}
 
-
         <Controller
           control={control}
           name="email"
           rules={{
             required: "Email is required",
-            pattern: { value: /^\S+@\S+$/i, message: "Invalid email" }
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: "Invalid email",
+            },
           }}
           render={({ field: { onChange, value } }) => (
             <TextInput
@@ -84,7 +128,6 @@ export default function Register() {
         {errors.email && (
           <Text style={styles.errorText}>{(errors.email as any).message}</Text>
         )}
-
 
         <Controller
           control={control}
@@ -104,26 +147,36 @@ export default function Register() {
           )}
         />
         {errors.password && (
-          <Text style={styles.errorText}>{(errors.password as any).message}</Text>
+          <Text style={styles.errorText}>
+            {(errors.password as any).message}
+          </Text>
         )}
 
+        {errorMessage && (
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        )}
 
-        {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
+        {successMessage && (
+          <Text style={styles.successMessage}>{successMessage}</Text>
+        )}
 
-
-        <TouchableOpacity style={styles.registerButton} onPress={handleSubmit(onSubmit)}>
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={handleSubmit(onSubmit)}
+        >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
 
-
-        <TouchableOpacity style={styles.loginButton} onPress={() => router.push("/login")}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => router.push("/login")}
+        >
           <Text style={styles.buttonTextAlt}>Login</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -208,5 +261,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-

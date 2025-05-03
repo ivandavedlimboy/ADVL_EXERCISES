@@ -1,31 +1,40 @@
 import { useForm, Controller } from "react-hook-form";
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
-
+import { router } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/config/firebase";
 
 export default function Login() {
   const { control, handleSubmit, formState: { errors } } = useForm();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const router = useRouter();
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    setSuccessMessage("Logged in successfully!");
-    setTimeout(() => {
-      setSuccessMessage(null);
-      router.push("/(tabs)/exercise");
-    }, 2000);
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then(() => {
+        setSuccessMessage("Logged in successfully!");
+        setErrorMessage(null);
+        setTimeout(() => {
+          setSuccessMessage(null);
+          router.replace("/(portal)/dashboard");
+        }, 2000);
+      })
+      .catch((error) => {
+        if (error.code === "auth/invalid-credential") {
+          setErrorMessage("Invalid email or password.");
+        } else {
+          setErrorMessage("Login failed. Please try again.");
+        }
+        setSuccessMessage(null);
+      });
   };
-
 
   return (
     <View style={styles.container}>
       <Text style={styles.mainTitle}>LOG-IN</Text>
       <View style={styles.loginBox}>
         <Text style={styles.title}>ADVL_EXERCISE PORTAL</Text>
-
 
         <Controller
           control={control}
@@ -45,10 +54,10 @@ export default function Login() {
             />
           )}
         />
+        
         {errors.email && (
           <Text style={styles.errorText}>{(errors.email as any).message}</Text>
         )}
-
 
         <Controller
           control={control}
@@ -64,18 +73,16 @@ export default function Login() {
             />
           )}
         />
-        {errors.password && (
+       {errors.password && (
           <Text style={styles.errorText}>{(errors.password as any).message}</Text>
         )}
 
-
         {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
-
+        {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
 
         <TouchableOpacity style={styles.loginButton} onPress={handleSubmit(onSubmit)}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-
 
         <TouchableOpacity style={styles.registerButton} onPress={() => router.push("/register")}>
           <Text style={styles.registerText}>Register</Text>
@@ -84,7 +91,6 @@ export default function Login() {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
